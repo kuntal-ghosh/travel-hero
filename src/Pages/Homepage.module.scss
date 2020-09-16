@@ -29,7 +29,20 @@
   left: 13.5rem;
   z-index: 200;
   h1 {
+    margin-bottom: 1rem;
     font-size: 5.5rem !important;
+  }
+  p {
+    margin-right: 1rem;
+    padding-right: 1rem;
+    text-align: justify;
+  }
+  button {
+    margin-top: 0.5rem;
+    background: #f9a51a;
+    border-radius: 5px;
+    padding: 1rem 3.5rem;
+    border: none;
   }
 }
 .place_carousol {

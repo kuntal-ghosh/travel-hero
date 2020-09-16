@@ -11,12 +11,16 @@ const Homepage = () => {
             <div className="col-5 h-100 position-relative">
               <div className={styles.place_info}>
                 <h1 className="text-123">place name</h1>
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Iusto, ipsum officiis, earum eum sapiente provident ducimus
+                  eos alias molestias asperiores nihil ut quae rerum animi.
+                </p>
+                <button>Booking</button>
               </div>
             </div>
             <div className="col-7 h-100 position-relative">
-              <div
-                className={cx(styles.place_carousol, "d-flex")}
-              >
+              <div className={cx(styles.place_carousol, "d-flex")}>
                 <LocationCard></LocationCard>
                 <LocationCard></LocationCard>
                 <LocationCard></LocationCard>

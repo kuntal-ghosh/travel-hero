@@ -1,0 +1,40 @@
+.homepage {
+  &_header {
+    background-image: linear-gradient(
+        to right bottom,
+        rgba(0, 0, 0, 0.7),
+        rgba(0, 0, 0, 0.7)
+      ),
+      url("../assets/Image/Rectangle\ 1.png");
+
+    background-size: cover;
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-position: center center;
+
+    &_container {
+      z-index: 100;
+      //   top: 0;
+      //   left: 0;
+      //   right: 0;
+      width: 100vw;
+      height: 100vh;
+    }
+  }
+}
+
+.place_info {
+  position: absolute;
+  top: 23.6rem;
+  left: 13.5rem;
+  z-index: 200;
+  h1 {
+    font-size: 5.5rem !important;
+  }
+}
+.place_carousol {
+  position: absolute;
+  top: 23.6rem;
+  left: 0;
+  z-index: 200;
+}

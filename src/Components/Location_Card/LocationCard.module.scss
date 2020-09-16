@@ -1,0 +1,27 @@
+.card {
+  position: relative;
+  height: 416px;
+  width: 270px;
+  border: 1px solid;
+  margin-right: 1rem;
+  background-image: linear-gradient(
+      0.12deg,
+      #000000 0.1%,
+      rgba(0, 0, 0, 0) 69.96%
+    ),
+    url("../../assets/Image/Rectangle\ 1.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 20px;
+
+  h6 {
+    position: absolute;
+
+    left: 16px;
+    top: 350px;
+    font-size: 3rem;
+    color: #ffffff;
+    font-family: Bebas Neue;
+  }
+}

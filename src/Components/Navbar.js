@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import styles from "./Navbar.module.scss";
 import cx from "classname";
 import logo from "../assets/Logo.png";
+import { Link } from "react-router-dom";
+import navbarColorContext from "../Context/NavbarColorContext";
 const Navbar = () => {
+  const [navbarColor, setNavbarColor] = useContext(navbarColorContext);
   return (
     <>
       <div className={cx(styles.navbar_container, "container d-flex")}>
@@ -30,12 +33,17 @@ const Navbar = () => {
           <li className={styles.navbar_container_ul_li}>Blog</li>
           <li className={styles.navbar_container_ul_li}>Contact</li>
           <li className={styles.navbar_container_ul_li}>
-            <button>Login</button>
+            <Link to="/signin">
+              <button onClick={onLoginClick}>Login</button>
+            </Link>
           </li>
         </ul>
       </div>
     </>
   );
+  function onLoginClick(e) {
+    // e.preventDefault();
+  }
 };
 
 export default Navbar;

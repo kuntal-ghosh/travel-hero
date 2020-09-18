@@ -121,6 +121,10 @@ const SignIn = () => {
               <Button variant="contained" fullWidth>
                 Signin
               </Button>
+              <div className="text-center mt-4">
+                Don't have an account?
+                <Link to="/signup">Create an account</Link>
+              </div>
             </form>
           </div>
         </div>

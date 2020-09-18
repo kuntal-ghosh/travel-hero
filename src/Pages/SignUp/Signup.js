@@ -65,7 +65,7 @@ const Signup = () => {
           <div className={cx(styles.booking_form, "d-flex")}>
             <form className={classes.root} noValidate autoComplete="off">
               <div>
-                <h1>Register</h1>
+                <h1>Create an account</h1>
               </div>
               <TextField
                 // variant="outlined"

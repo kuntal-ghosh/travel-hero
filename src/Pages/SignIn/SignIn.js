@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import Checkbox from "@material-ui/core/Checkbox";
 import navbarColorContext from "../../Context/NavbarColorContext";
 import styles from "./Signin.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   TextField,
   FormControl,
@@ -59,7 +59,9 @@ const SignIn = () => {
   //   const [navbarColor, setNavbarColor] = useContext(navbarColorContext);
   //   let newColor = { ...navbarColor };
   //   setNavbarColor(newColor);
+  const location = useLocation();
   const classes = useStyles();
+  console.log(location.pathname);
 
   return (
     <>

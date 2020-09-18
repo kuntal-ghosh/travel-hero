@@ -16,6 +16,8 @@ function App() {
   useEffect(() => {
     setPlaces(FakeData);
   }, []);
+
+  
   return (
     <>
       {/* <div className={styles.App}>hello</div> */}

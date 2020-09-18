@@ -9,6 +9,7 @@ import {
   InputLabel,
   OutlinedInput,
   InputAdornment,
+  FormHelperText,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
@@ -92,6 +93,8 @@ const SignIn = () => {
                 //   shrink: true,
                 // }}
               />
+              <FormHelperText id="component-error-text">Error</FormHelperText>
+
               <TextField
                 id="standard-full-width"
                 label="Password"

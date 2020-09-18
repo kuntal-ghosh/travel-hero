@@ -32,12 +32,14 @@ const Navbar = () => {
       <div className={cx(styles.navbar_container, "container d-flex")}>
         <ul className={cx(styles.navbar_container_ul, "d-flex")}>
           <li className={styles.navbar_container_ul_li_img}>
-            <img
-              src={logo}
-              alt="logo"
-              style={logoColor}
-              //   className={styles.navbar_container_ul_li_img}
-            />
+            <Link to="/">
+              <img
+                src={logo}
+                alt="logo"
+                style={logoColor}
+                //   className={styles.navbar_container_ul_li_img}
+              />
+            </Link>
           </li>
           <li className={styles.navbar_container_ul_li_input}>
             <input

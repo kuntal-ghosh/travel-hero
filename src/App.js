@@ -9,41 +9,43 @@ import Bookingpage from "./Pages/Booking/Booking";
 import SignIn from "./Pages/SignIn/SignIn";
 import Signup from "./Pages/SignUp/Signup";
 import navbarColorContext from "./Context/NavbarColorContext";
+import userContext from "./Context/userContext";
+import user from "./Models/user";
 
 function App() {
   const [places, setPlaces] = useState([]);
   const [navbarColor, setNavbarColor] = useState({ color: "white" });
+  const [user, setUser] = useState({ email: "", password: "", error: {} });
   useEffect(() => {
     setPlaces(FakeData);
   }, []);
 
-  
   return (
     <>
       {/* <div className={styles.App}>hello</div> */}
-      <navbarColorContext.Provider value={[navbarColor, setNavbarColor]}>
+      <userContext.Provider value={[user, setUser]}>
         <Navbar></Navbar>
-      </navbarColorContext.Provider>
 
-      <Switch>
-        <Route path="/homepage">
-          {/* <Homepage places={places}></Homepage> */}
-        </Route>
-        <Route path="/signin">
-          <navbarColorContext.Provider value={[navbarColor, setNavbarColor]}>
-            <SignIn></SignIn>
-          </navbarColorContext.Provider>
-        </Route>
-        <Route path="/signup">
-          <Signup></Signup>
-        </Route>
-        <Route path="/booking/:placeId">
-          <Bookingpage places={places}></Bookingpage>
-        </Route>
-        <Route exact path="/">
-          <Homepage places={places}></Homepage>
-        </Route>
-      </Switch>
+        <Switch>
+          <Route path="/homepage">
+            {/* <Homepage places={places}></Homepage> */}
+          </Route>
+          <Route path="/signin">
+            <navbarColorContext.Provider value={[navbarColor, setNavbarColor]}>
+              <SignIn></SignIn>
+            </navbarColorContext.Provider>
+          </Route>
+          <Route path="/signup">
+            <Signup></Signup>
+          </Route>
+          <Route path="/booking/:placeId">
+            <Bookingpage places={places}></Bookingpage>
+          </Route>
+          <Route exact path="/">
+            <Homepage places={places}></Homepage>
+          </Route>
+        </Switch>
+      </userContext.Provider>
     </>
   );
 }

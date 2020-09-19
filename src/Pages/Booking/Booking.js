@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Booking.module.scss";
 import cx from "classname";
-import LocationCard from "../../Components/Location_Card/LocationCard";
+// import LocationCard from "../../Components/Location_Card/LocationCard";
 import { useParams } from "react-router-dom";
 import {
   TextField,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
-  InputAdornment,
+  // FormControl,
+  // InputLabel,
+  // OutlinedInput,
+  // InputAdornment,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";

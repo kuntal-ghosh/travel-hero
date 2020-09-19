@@ -10,7 +10,7 @@ const Navbar = () => {
   console.log("location");
   console.log(location.pathname);
 
-  const [navbarColor, setNavbarColor] = useContext(navbarColorContext);
+  // const [navbarColor, setNavbarColor] = useContext(navbarColorContext);
   let logoColor;
   let inputColor;
   let inputPlaceholderColorClass;

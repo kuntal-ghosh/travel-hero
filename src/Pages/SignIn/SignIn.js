@@ -1,26 +1,23 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Checkbox from "@material-ui/core/Checkbox";
-import navbarColorContext from "../../Context/NavbarColorContext";
+// import navbarColorContext from "../../Context/NavbarColorContext";
 import styles from "./Signin.module.scss";
 import { Link, useLocation } from "react-router-dom";
-import {
-  TextField,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
-  InputAdornment,
-  FormHelperText,
-} from "@material-ui/core";
+import { TextField, FormHelperText } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
 import {
-  MuiPickersUtilsProvider,
+  // MuiPickersUtilsProvider,
   KeyboardTimePicker,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
-import Grid from "@material-ui/core/Grid";
+// import DateFnsUtils from "@date-io/date-fns";
+// import Grid from "@material-ui/core/Grid";
 import cx from "classname";
+import userContext from "../../Context/userContext";
+// import user from "../../Models/user";
+import * as firebase from "../../services/firebase.auth";
+import { Delete } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,6 +44,10 @@ const useStyles = makeStyles((theme) => ({
       paddingTop: "12px",
       backgroundColor: "rgba(249,165,26,1)",
     },
+    "& .MuiFormHelperText-root": {
+      // textAlign: "center",
+      // width: "100%",
+    },
   },
   input: {
     minHeight: "100px",
@@ -62,22 +63,38 @@ const SignIn = () => {
   //   setNavbarColor(newColor);
   const location = useLocation();
   const classes = useStyles();
+  const [user, setUser] = useContext(userContext);
+  console.log(user);
   console.log(location.pathname);
+
+  useEffect(() => {});
 
   return (
     <>
       <div className={styles.signin}>
         <div className={styles.signin_form}>
           <div className={cx(styles.booking_form, "d-flex")}>
-            <form className={classes.root} noValidate autoComplete="off">
+            <form
+              onSubmit={handleSubmit}
+              className={classes.root}
+              noValidate
+              autoComplete="off"
+            >
               <div>
                 <h1>Login</h1>
               </div>
+              <FormHelperText focused="true" error="true">
+                {user.error && user.error.message}
+              </FormHelperText>
               <TextField
                 // variant="outlined"
+                error={user.error.email ? true : false}
                 id="standard-full-width"
                 label="Email"
                 className={styles.textfield}
+                name="email"
+                value={user.email}
+                onChange={handleChange}
                 // input:classes.input
                 // classes={{
                 //   input: classes.input,
@@ -88,20 +105,27 @@ const SignIn = () => {
                 // helperText="Full width!"
                 fullWidth
                 margin="normal"
+                helperText={user.error.email}
+
                 // defaultValue={`dhaka`}
                 // InputLabelProps={{
                 //   shrink: true,
                 // }}
               />
-              <FormHelperText id="component-error-text">Error</FormHelperText>
 
               <TextField
+                error={user.error.password ? true : false}
                 id="standard-full-width"
+                name="password"
+                value={user.password}
+                onChange={handleChange}
                 label="Password"
                 // variant="outlined"
                 type="password"
                 style={{ margin: 8 }}
                 fullWidth
+                minLength="8"
+                helperText={user.error.password}
                 // defaultValue={selectedPlace && `${selectedPlace.placeName}`}
                 // value={selectedPlace && `${selectedPlace.placeName}`}
                 // readOnly={false}
@@ -123,7 +147,7 @@ const SignIn = () => {
                   <Link>Forget Password</Link>
                 </div>
               </div>
-              <Button variant="contained" fullWidth>
+              <Button type="submit" variant="contained" fullWidth>
                 Signin
               </Button>
               <div className="text-center mt-4">
@@ -136,6 +160,63 @@ const SignIn = () => {
       </div>
     </>
   );
+  async function handleSubmit(e) {
+    e.preventDefault();
+    console.log("submitted");
+    // console.log(e.target.name);
+    let newUser = { ...user };
+    if (newUser.email === "") {
+      newUser.error.email = "Email is required";
+    } else delete newUser.error.email;
+
+    if (newUser.password === "") {
+      newUser.error.password = "Password is required";
+    } else delete newUser.error.password;
+    setUser(newUser);
+    let errors = Object.keys(user.error).length > 0;
+    if (!errors) {
+      try {
+        let response = await firebase.signinWithEmailPassword(
+          user.email,
+          user.password
+        );
+        console.log("response");
+        console.log(response);
+      } catch (e) {
+        console.log(e.message);
+        const newUser = { ...user };
+        newUser.error.message = e.message;
+        setUser(newUser);
+      }
+    }
+
+    // console.log("submit response");
+    // console.log(response);
+  }
+
+  function handleChange({ target: { name, value } }) {
+    console.log(name);
+    let newUser = { ...user };
+    newUser[name] = value.trim();
+
+    if (name === "email") {
+      if (value.trim() === "") {
+        newUser.error.email = "email is required";
+      } else {
+        newUser.error.email = "";
+      }
+    }
+
+    if (name === "password") {
+      if (value.trim() === "") {
+        newUser.error.password = "password is required";
+      } else {
+        newUser.error.password = "";
+      }
+    }
+
+    setUser(newUser);
+  }
 };
 
 export default SignIn;

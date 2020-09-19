@@ -28,15 +28,13 @@ function signupwithEmailPassword(email, password) {
 }
 
 function signinWithEmailPassword(email, password) {
-  return firebase
-    .auth()
-    .signInWithEmailAndPassword(email, password)
-    .catch(function (error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // ...
-    });
+  return firebase.auth().signInWithEmailAndPassword(email, password);
+  // .catch(function (error) {
+  //   // Handle Errors here.
+  //   var errorCode = error.code;
+  //   var errorMessage = error.message;
+  //   // ...
+  // });
 }
 
 function signinWithGoogle() {
@@ -65,9 +63,8 @@ function signinWithGoogle() {
     });
 }
 
-
-signout() {
-    firebase
+function signout() {
+  firebase
     .auth()
     .signOut()
     .then(function () {
@@ -78,3 +75,9 @@ signout() {
     });
 }
 
+export {
+  signupwithEmailPassword,
+  signinWithEmailPassword,
+  signinWithGoogle,
+  signout,
+};

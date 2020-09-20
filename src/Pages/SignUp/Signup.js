@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import Checkbox from "@material-ui/core/Checkbox";
 import navbarColorContext from "../../Context/NavbarColorContext";
 import styles from "./Signup.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   TextField,
   FormControl,
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
     // justifyContent: "center",
     // textAlign: "center",
-    margin: "20px auto",
+    margin: "10px auto",
     "& > *": {
       //   textAlign: "center",
       // margin: "0 auto",
@@ -66,6 +66,7 @@ const Signup = () => {
     confirmPassword: "",
     error: {},
   });
+  const history = useHistory();
 
   return (
     <>
@@ -96,7 +97,7 @@ const Signup = () => {
                 //   input: classes.input,
                 // }}
                 // classes={{root}}
-                style={{ marginBottom: 20, marginTop: 20 }}
+                style={{ marginBottom: 10, marginTop: 10 }}
                 // placeholder="Placeholder"
                 // helperText="Full width!"
                 fullWidth
@@ -121,7 +122,7 @@ const Signup = () => {
                 //   input: classes.input,
                 // }}
                 // classes={{root}}
-                style={{ marginBottom: 20, marginTop: 20 }}
+                style={{ marginBottom: 10, marginTop: 10 }}
                 // placeholder="Placeholder"
                 // helperText="Full width!"
                 fullWidth
@@ -146,7 +147,7 @@ const Signup = () => {
                 //   input: classes.input,
                 // }}
                 // classes={{root}}
-                style={{ marginBottom: 20, marginTop: 20 }}
+                style={{ marginBottom: 10, marginTop: 10 }}
                 // placeholder="Placeholder"
                 // helperText="Full width!"
                 fullWidth
@@ -161,7 +162,7 @@ const Signup = () => {
                 label="Password"
                 // variant="outlined"
                 type="password"
-                style={{ margin: 8 }}
+                style={{ margin: 10 }}
                 fullWidth
                 error={user.error.password ? true : false}
                 name="password"
@@ -180,7 +181,7 @@ const Signup = () => {
                 label="Confirm Password"
                 // variant="outlined"
                 type="password"
-                style={{ margin: 8 }}
+                style={{ margin: 10 }}
                 fullWidth
                 error={user.error.confirmPassword ? true : false}
                 name="confirmPassword"
@@ -256,18 +257,24 @@ const Signup = () => {
 
     if (!errors) {
       try {
-        let response = await firebase.signinWithEmailPassword(
+        let { user: registerUser } = await firebase.signupwithEmailPassword(
           user.email,
           user.password
         );
         console.log("response");
-        console.log(response);
+        console.log(registerUser);
+        if(registerUser.email)
+      {
+       history.push("/signin"); 
+      }
+       
       } catch (e) {
         console.log(e.message);
         const newUser = { ...user };
         newUser.error.message = e.message;
         setUser(newUser);
       }
+      
     }
 
     // console.log("submit response");
@@ -280,19 +287,41 @@ const Signup = () => {
     newUser[name] = value.trim();
 
     if (name === "email") {
-      if (value.trim() === "") {
-        newUser.error.email = "email is required";
-      } else {
-        newUser.error.email = "";
-      }
+      if (newUser.email === "") {
+        newUser.error.email = "Email is required";
+      } else delete newUser.error.email;
     }
 
     if (name === "password") {
-      if (value.trim() === "") {
-        newUser.error.password = "password is required";
+      if (newUser.password === "") {
+        newUser.error.password = "Password is required";
+      } else delete newUser.error.password;
+
+      if (user.confirmPassword !== value.trim()) {
+        newUser.error.confirmPassword = "should be same as password";
       } else {
-        newUser.error.password = "";
+        delete newUser.error.confirmPassword;
       }
+    }
+
+    if (name === "firstName") {
+      if (newUser.firstName === "") {
+        newUser.error.firstName = "Firstname is required";
+      } else delete newUser.error.firstName;
+    }
+
+    if (name === "lastName") {
+      if (newUser.lastName === "") {
+        newUser.error.lastName = "Lastname is required";
+      } else delete newUser.error.lastName;
+    }
+
+    if (name === "confirmPassword") {
+      if (newUser.confirmPassword === "") {
+        newUser.error.confirmPassword = "Confirm Password is required";
+      } else if (user.password.trim() !== value.trim()) {
+        newUser.error.confirmPassword = "should be same as password";
+      } else delete newUser.error.confirmPassword;
     }
 
     setUser(newUser);

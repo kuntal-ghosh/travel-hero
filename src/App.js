@@ -15,7 +15,7 @@ import user from "./Models/user";
 function App() {
   const [places, setPlaces] = useState([]);
   const [navbarColor, setNavbarColor] = useState({ color: "white" });
-  const [user, setUser] = useState({ email: "", password: "", error: {} });
+  const [loggedInUser, setloggedInUser] = useState({});
   useEffect(() => {
     setPlaces(FakeData);
   }, []);
@@ -23,7 +23,7 @@ function App() {
   return (
     <>
       {/* <div className={styles.App}>hello</div> */}
-      <userContext.Provider value={[user, setUser]}>
+      <userContext.Provider value={[loggedInUser, setloggedInUser]}>
         <Navbar></Navbar>
 
         <Switch>

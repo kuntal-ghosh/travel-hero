@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Checkbox from "@material-ui/core/Checkbox";
 // import navbarColorContext from "../../Context/NavbarColorContext";
 import styles from "./Signin.module.scss";
@@ -18,6 +18,8 @@ import userContext from "../../Context/userContext";
 // import user from "../../Models/user";
 import * as firebase from "../../services/firebase.auth";
 import { Delete } from "@material-ui/icons";
+import DeleteIcon from "@material-ui/icons/Delete";
+import SocialLoginButton from "../../Components/Social_Login_Button/Social_Login_Button";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
     // justifyContent: "center",
     // textAlign: "center",
-    margin: "20px auto",
+    margin: "10px auto",
     "& > *": {
       //   textAlign: "center",
       // margin: "0 auto",
@@ -39,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
       display: "block",
     },
     "& .MuiButton-fullWidth": {
-      marginTop: "30px",
+      marginTop: "20px",
       width: "95% !important",
       paddingTop: "12px",
       backgroundColor: "rgba(249,165,26,1)",
@@ -48,6 +50,32 @@ const useStyles = makeStyles((theme) => ({
       // textAlign: "center",
       // width: "100%",
     },
+  },
+  button: {
+    position: "relative",
+    width: "100%",
+    height: "4rem",
+    border: "1px solid black",
+    borderRadius: "2rem",
+    margin: "auto",
+  },
+  button_text: {
+    margin: "0",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+  },
+  button_icon: {
+    width: "4rem",
+    height: "4rem",
+    padding: ".5rem",
+    zIndex: "200",
+    position: "absolute",
+    margin: "0",
+    top: "50%",
+    left: ".2rem",
+    transform: "translate(0%, -50%)",
   },
   input: {
     minHeight: "100px",
@@ -63,7 +91,9 @@ const SignIn = () => {
   //   setNavbarColor(newColor);
   const location = useLocation();
   const classes = useStyles();
-  const [user, setUser] = useContext(userContext);
+  const [loggedInUser, setloggedInUser] = useContext(userContext);
+  const [user, setUser] = useState({ email: "", password: "", error: {} });
+
   console.log(user);
   console.log(location.pathname);
 
@@ -100,7 +130,7 @@ const SignIn = () => {
                 //   input: classes.input,
                 // }}
                 // classes={{root}}
-                style={{ marginBottom: 20, marginTop: 20 }}
+                style={{ marginBottom: 10, marginTop: 10 }}
                 // placeholder="Placeholder"
                 // helperText="Full width!"
                 fullWidth
@@ -122,7 +152,7 @@ const SignIn = () => {
                 label="Password"
                 // variant="outlined"
                 type="password"
-                style={{ margin: 8 }}
+                // style={{ margin: 8 }}
                 fullWidth
                 minLength="8"
                 helperText={user.error.password}
@@ -153,6 +183,31 @@ const SignIn = () => {
               <div className="text-center mt-4">
                 Don't have an account?
                 <Link to="/signup">Create an account</Link>
+              </div>
+              <div>
+                {/* <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                  startIcon={<DeleteIcon />}
+                >
+                  Delete
+                </Button> */}
+                <span className="mt-3">
+                  <hr />
+                </span>
+              </div>
+              <div onClick={facebookSignIN}>
+                <SocialLoginButton
+                  imageUrl="/images/fb.png"
+                  buttonText="Continue with Facebook account"
+                ></SocialLoginButton>
+              </div>
+              <div onClick={googleSignIN}>
+                <SocialLoginButton
+                  imageUrl="/images/google.png"
+                  buttonText="Continue with Google account"
+                ></SocialLoginButton>
               </div>
             </form>
           </div>
@@ -216,6 +271,24 @@ const SignIn = () => {
     }
 
     setUser(newUser);
+  }
+
+  function facebookSignIN() {}
+
+  async function googleSignIN() {
+    console.log("google clicked");
+    let newUser = { ...user };
+
+    try {
+      const { user } = await firebase.signinWithGoogle();
+      console.log(user);
+      newUser.email = user.email;
+      newUser.password = user.password;
+      setUser(newUser);
+      setloggedInUser(user);
+    } catch (e) {
+      console.log(e.message);
+    }
   }
 };
 

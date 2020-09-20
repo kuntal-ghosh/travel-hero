@@ -59,7 +59,7 @@ function signinWithGoogle() {
       // The firebase.auth.AuthCredential type that was used.
       var credential = error.credential;
       // ...
-      return error;
+      throw  error;
     });
 }
 

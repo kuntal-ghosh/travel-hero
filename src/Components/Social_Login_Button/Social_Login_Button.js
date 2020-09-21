@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     border: "1px solid black",
     borderRadius: "2rem",
     margin: "auto",
-    cursor:"pointer",
+    cursor:"pointer"
   },
   button_text: {
     margin: "0",

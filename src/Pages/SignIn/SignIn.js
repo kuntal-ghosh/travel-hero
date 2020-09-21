@@ -219,7 +219,9 @@ const SignIn = () => {
     e.preventDefault();
     console.log("submitted");
     // console.log(e.target.name);
-    let newUser = { ...user };
+     let newUser = { ...user };
+    delete newUser.error.message;
+
     if (newUser.email === "") {
       newUser.error.email = "Email is required";
     } else delete newUser.error.email;
@@ -227,23 +229,28 @@ const SignIn = () => {
     if (newUser.password === "") {
       newUser.error.password = "Password is required";
     } else delete newUser.error.password;
-    setUser(newUser);
     let errors = Object.keys(user.error).length > 0;
     if (!errors) {
       try {
-        let response = await firebase.signinWithEmailPassword(
+        let { user: loggedUser } = await firebase.signinWithEmailPassword(
           user.email,
           user.password
         );
-        console.log("response");
-        console.log(response);
+        if (loggedUser.email) {
+          newUser.email = loggedUser.email;
+          console.log("response");
+          console.log(user);
+          delete newUser.error.message;
+          setloggedInUser(loggedUser);
+        }
       } catch (e) {
         console.log(e.message);
-        const newUser = { ...user };
+        // const newUser = { ...user };
         newUser.error.message = e.message;
-        setUser(newUser);
+        // setUser(newUser);
       }
     }
+    setUser(newUser);
 
     // console.log("submit response");
     // console.log(response);
@@ -273,7 +280,25 @@ const SignIn = () => {
     setUser(newUser);
   }
 
-  function facebookSignIN() {}
+  async function facebookSignIN() {
+    console.log("facebook clicked");
+    let newUser = { ...user };
+
+    try {
+      const response = await firebase.signinWithFacebook();
+      console.log(response);
+
+      newUser.email = response.user.email;
+      delete newUser.error.message;
+
+      // newUser.password = user.password;
+      setloggedInUser(user);
+
+      setUser(newUser);
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
 
   async function googleSignIN() {
     console.log("google clicked");
@@ -282,10 +307,15 @@ const SignIn = () => {
     try {
       const { user } = await firebase.signinWithGoogle();
       console.log(user);
-      newUser.email = user.email;
-      newUser.password = user.password;
-      setUser(newUser);
-      setloggedInUser(user);
+      if (user.email) {
+        newUser.email = user.email;
+        delete newUser.error.message;
+
+        // newUser.password = user.password;
+        setloggedInUser(user);
+
+        setUser(newUser);
+      }
     } catch (e) {
       console.log(e.message);
     }

@@ -6,8 +6,9 @@
 
   &_form {
     position: absolute;
-    width: 47rem;
-    height: 40rem;
+    max-width: 47rem;
+    max-height: 50rem;
+    padding: 1.5rem;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);

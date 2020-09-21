@@ -8,6 +8,12 @@
   align-items: center;
   align-content: center;
   z-index: 1000;
+  @media only screen and (max-width: 1000px) {
+    // .navbar_container {
+    display: none;
+
+    // }
+  }
 }
 .navbar_container_ul {
   width: 100%;
@@ -24,6 +30,11 @@
     padding: 0.4rem 2rem;
     background-color: #f9a51a;
     border-radius: 0.5rem;
+  }
+  &_nav_link {
+    a {
+      color: #ffffff !important;
+    }
   }
 }
 
@@ -64,5 +75,10 @@
     &::placeholder {
       color: black !important;
     }
+  }
+
+  &_button_nav_dropdown {
+    height: 100%;
+    margin: auto;
   }
 }

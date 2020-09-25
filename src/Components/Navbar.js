@@ -38,12 +38,12 @@ const Navbar = ({ user }) => {
     navLinkColor = null;
   }
 
-  let button = loggedInUser ? (
+  let button = loggedInUser.email ? (
     <div className=" d-flex">
       <NavDropdown
         title={
           <span style={{ color: "black!important" }}>
-            {loggedInUser && loggedInUser.displayName}
+            {loggedInUser.email && loggedInUser.displayName}
           </span>
         }
         id="basic-nav-dropdown"
@@ -60,7 +60,7 @@ const Navbar = ({ user }) => {
       </NavDropdown>
 
       <Image
-        src={loggedInUser && loggedInUser.photoURL}
+        src={loggedInUser.email && loggedInUser.photoURL}
         alt="hfeh"
         style={{ width: "50px", padding: "10px" }}
         roundedCircle
@@ -134,7 +134,7 @@ const Navbar = ({ user }) => {
     console.log(response);
     if (!response) {
       // newUser.email = "";
-      setloggedInUser(response);
+      setloggedInUser({ email: "", password: "" });
 
       history.push("/signin");
     }

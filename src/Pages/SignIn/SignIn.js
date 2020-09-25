@@ -323,7 +323,8 @@ const SignIn = () => {
         setloggedInUser(user);
 
         setUser(newUser);
-        authenticate();
+        // authenticate();
+        history.push(from);
       }
     } catch (e) {
       console.log(e.message);

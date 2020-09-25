@@ -2,12 +2,16 @@ import React, { useContext } from "react";
 import styles from "./Navbar.module.scss";
 import cx from "classname";
 import logo from "../assets/Logo.png";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 import navbarColorContext from "../Context/NavbarColorContext";
 import { NavDropdown, Image } from "react-bootstrap";
+import * as firebase from "../services/firebase.auth";
+import userContext from "../Context/userContext";
 
 const Navbar = ({ user }) => {
+  const [loggedInUser, setloggedInUser] = useContext(userContext);
   const location = useLocation();
+  const history = useHistory();
   // const classes = useStyles();
   console.log("location");
   console.log(location.pathname);
@@ -34,18 +38,20 @@ const Navbar = ({ user }) => {
     navLinkColor = null;
   }
 
-  let button = user.email ? (
+  let button = loggedInUser ? (
     <div className=" d-flex">
       <NavDropdown
         title={
-          <span style={{ color: "black!important" }}>{user.displayName}</span>
+          <span style={{ color: "black!important" }}>
+            {loggedInUser && loggedInUser.displayName}
+          </span>
         }
         id="basic-nav-dropdown"
         className="d-inline-block navbar_button_nav_dropdown text-primary"
         style={{ margin: "auto", color: "black" }}
       >
         <NavDropdown.Item
-          // onClick={props.googleSignOut}
+          onClick={googleSignOut}
           className={styles.button_nav_dropdown_item}
           // style={{ color: "black !important" }}
         >
@@ -54,7 +60,7 @@ const Navbar = ({ user }) => {
       </NavDropdown>
 
       <Image
-        src={user.photoURL}
+        src={loggedInUser && loggedInUser.photoURL}
         alt="hfeh"
         style={{ width: "50px", padding: "10px" }}
         roundedCircle
@@ -67,7 +73,7 @@ const Navbar = ({ user }) => {
   );
 
   console.log("user navbar");
-  console.log(user);
+  console.log(loggedInUser);
   return (
     <>
       <div className={cx(styles.navbar_container, "container  d-lg-flex")}>
@@ -119,6 +125,19 @@ const Navbar = ({ user }) => {
   );
   function onLoginClick(e) {
     // e.preventDefault();
+  }
+  async function googleSignOut() {
+    const newUser = { ...loggedInUser };
+    console.log("signout of my site");
+    const response = await firebase.signout();
+    // setloggedInUser(response);
+    console.log(response);
+    if (!response) {
+      // newUser.email = "";
+      setloggedInUser(response);
+
+      history.push("/signin");
+    }
   }
 };
 

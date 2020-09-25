@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styles from "./Booking.module.scss";
 import cx from "classname";
 // import LocationCard from "../../Components/Location_Card/LocationCard";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import {
   TextField,
   // FormControl,
@@ -19,6 +19,7 @@ import {
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import Grid from "@material-ui/core/Grid";
+import bookingContext from "../../Context/bookingContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,16 +68,33 @@ const useStyles = makeStyles((theme) => ({
 
 const Bookingpage = ({ places }) => {
   // let selectedItem;
+  const endDate = new Date();
   const { placeId } = useParams();
+
+  const [booked, setBooked] = useContext(bookingContext);
+
   const [selectedPlace, setSelectedPlace] = useState({});
+  const [booking, setBooking] = useState({
+    origin: "Dhaka",
+    place: "",
+    startDate: new Date(),
+    endDate: endDate.setDate(endDate.getDate() + 1),
+    error: {},
+  });
   const classes = useStyles();
+  const history = useHistory();
 
   useEffect(() => {
     const place = places.find((place) => place.id === placeId);
     setSelectedPlace(place);
+    const newBooking = { ...booking };
+    newBooking.place = place && place.placeName;
+    setBooking(newBooking);
   }, []);
-  console.log("place");
-  console.log(selectedPlace);
+  // console.log("place");
+  // console.log(selectedPlace);
+  console.log("booking");
+  console.log(booking);
 
   return (
     <>
@@ -93,8 +111,14 @@ const Bookingpage = ({ places }) => {
             </div>
             <div className="col-7 h-100 position-relative">
               <div className={cx(styles.booking_form, "d-flex")}>
-                <form className={classes.root} noValidate autoComplete="off">
+                <form
+                  onSubmit={handleSubmit}
+                  className={classes.root}
+                  noValidate
+                  autoComplete="off"
+                >
                   <TextField
+                    required="true"
                     variant="outlined"
                     id="standard-full-width"
                     label="Origin"
@@ -109,66 +133,91 @@ const Bookingpage = ({ places }) => {
                     // helperText="Full width!"
                     fullWidth
                     margin="normal"
-                    defaultValue={`dhaka`}
+                    // defaultValue={`dhaka`}
+                    name="origin"
+                    value={booking.origin}
+                    onChange={handleChange}
                     InputLabelProps={{
                       shrink: true,
                     }}
+                    error={booking.error && booking.error.origin}
+                    helperText={booking.error && booking.error.origin}
                   />
                   <TextField
+                    required="true"
                     id="standard-full-width"
-                    label="Outlined"
+                    label="Place"
                     variant="outlined"
                     style={{ margin: 8 }}
                     fullWidth
                     // defaultValue={selectedPlace && `${selectedPlace.placeName}`}
-                    value={selectedPlace && `${selectedPlace.placeName}`}
+                    name="place"
+                    value={booking.place}
+                    onChange={handleChange}
                     // readOnly={false}
                     InputLabelProps={{
                       shrink: true,
                     }}
+                    error={booking.error && booking.error.place}
+                    helperText={booking.error && booking.error.place}
                   />
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <Grid justify="space-between">
                       <KeyboardDatePicker
-                        disableToolbar
+                        required
+                        // disableToolbar
                         variant="inline"
+                        // clearLabel
+                        autoOk
                         format="MM/dd/yyyy"
                         margin="normal"
                         id="date-picker-inline"
                         label="From"
                         className={classes.datepicker}
                         // value={selectedDate}
-                        // onChange={handleDateChange}
                         style={{ paddingRight: 4 }}
                         KeyboardButtonProps={{
                           "aria-label": "change date",
                         }}
+                        // name="startDate"
+                        // value={}
+                        value={booking.startDate}
+                        onChange={(date) => handleStartDateChange(date)}
+
+                        // minDate=
                       />
                       <KeyboardDatePicker
-                        disableToolbar
+                        // disableToolbar
                         variant="inline"
+                        // clearLabel
+                        autoOk
                         format="MM/dd/yyyy"
                         margin="normal"
                         id="date-picker-inline"
                         label="To"
                         className={classes.datepicker}
                         // value={selectedDate}
-                        // onChange={handleDateChange}
                         KeyboardButtonProps={{
                           "aria-label": "change date",
                         }}
+                        value={booking.endDate}
+                        onChange={(date) => handleEndDateChange(date)}
+                        minDate={booking.startDate}
+                        required
                       />
                     </Grid>
                   </MuiPickersUtilsProvider>
-                  <Link to={`/search/${placeId}`}>
-                    <Button
-                      variant="contained"
-                      fullWidth
-                      style={{ textDecoration: "none" }}
-                    >
-                      Booking
-                    </Button>
-                  </Link>
+                  {/* <Link to={!booking.error && `/search/${placeId}`}> */}
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    style={{ textDecoration: "none" }}
+                    type="submit"
+                    onClick={handleSubmit}
+                  >
+                    Booking
+                  </Button>
+                  {/* </Link> */}
                 </form>
               </div>
             </div>
@@ -180,6 +229,38 @@ const Bookingpage = ({ places }) => {
 
   function onCardClick(id) {
     console.log("clickd");
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const newBooking = { ...booking };
+    let errors = Object.keys(booking.error).length > 0;  
+    if(!errors){
+      setBooking(newBooking);
+      setBooked(newBooking);
+      history.push(`/search/${placeId}`);
+    }  
+ 
+  }
+  function handleChange(e) {
+    const newBooking = { ...booking };
+    if (e.target.value === "") {
+      newBooking.error[e.target.name] = `${e.target.name} is required`;
+    } else {
+      delete newBooking.error[e.target.name];
+    }
+    newBooking[e.target.name] = e.target.value;
+    setBooking(newBooking);
+  }
+  function handleStartDateChange(date) {
+    const newBooking = { ...booking };
+    newBooking.startDate = date;
+    setBooking(newBooking);
+  }
+  function handleEndDateChange(date) {
+    const newBooking = { ...booking };
+    newBooking.endDate = date;
+    setBooking(newBooking);
   }
 };
 

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import FakeData from "../../FakeData";
 import MapContainer from "./Google_Map/Google_Map";
 import Map from "./Google_map_library/Google_map_library";
 import Hotel from "./hotels/hotel";
+import bookingContext from "../../Context/bookingContext";
 
 const Search = () => {
   const location = {
@@ -14,6 +15,7 @@ const Search = () => {
   const { placeId } = useParams();
   const [hotels, setHotels] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState({});
+  const [booked, setBooked] = useContext(bookingContext);
 
   useEffect(() => {
     let selectedLocation = FakeData.find((location) => location.id === placeId);
@@ -32,7 +34,19 @@ const Search = () => {
         <div className="row col-12">
           <div className="col-7">
             <div>
-              <p>252 stays april 13-17 guests</p>
+              <p>
+                252 guests stays From{" "}
+                {booked.startDate && booked.startDate.getDate()}
+                {"/"}
+                {booked.startDate && booked.startDate.getMonth()}
+                {"/"}
+                {booked.startDate && booked.startDate.getFullYear()} To
+                {booked.endDate && new Date(booked.endDate).getDate()}
+                {"/"}
+                {booked.endDate && new Date(booked.endDate).getMonth()}
+                {"/"}
+                {booked.endDate && new Date(booked.endDate).getFullYear()}
+              </p>
             </div>
             <div>
               <h1>stay in {selectedLocation.placeName}</h1>

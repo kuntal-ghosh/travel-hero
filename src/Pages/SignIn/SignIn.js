@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Checkbox from "@material-ui/core/Checkbox";
 // import navbarColorContext from "../../Context/NavbarColorContext";
 import styles from "./Signin.module.scss";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 import { TextField, FormHelperText } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
@@ -91,9 +91,10 @@ const SignIn = () => {
   //   setNavbarColor(newColor);
   const location = useLocation();
   const classes = useStyles();
+  const history = useHistory();
   const [loggedInUser, setloggedInUser] = useContext(userContext);
   const [user, setUser] = useState({ email: "", password: "", error: {} });
-
+  let { from } = location.state || { from: { pathname: "/" } };
   console.log(user);
   console.log(location.pathname);
 
@@ -215,11 +216,17 @@ const SignIn = () => {
       </div>
     </>
   );
+
+  function authenticate() {
+    if (loggedInUser.email) {
+      history.replace(from);
+    }
+  }
   async function handleSubmit(e) {
     e.preventDefault();
     console.log("submitted");
     // console.log(e.target.name);
-     let newUser = { ...user };
+    let newUser = { ...user };
     delete newUser.error.message;
 
     if (newUser.email === "") {
@@ -251,6 +258,7 @@ const SignIn = () => {
       }
     }
     setUser(newUser);
+    authenticate();
 
     // console.log("submit response");
     // console.log(response);
@@ -315,6 +323,7 @@ const SignIn = () => {
         setloggedInUser(user);
 
         setUser(newUser);
+        authenticate();
       }
     } catch (e) {
       console.log(e.message);

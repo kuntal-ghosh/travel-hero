@@ -11,6 +11,8 @@ import Signup from "./Pages/SignUp/Signup";
 import navbarColorContext from "./Context/NavbarColorContext";
 import userContext from "./Context/userContext";
 import user from "./Models/user";
+import Search from "./Pages/Search/Search";
+import PrivateRoute from "./Route/PrivateRoute";
 
 function App() {
   const [places, setPlaces] = useState([]);
@@ -41,6 +43,9 @@ function App() {
           </Route>
           <Route path="/booking/:placeId">
             <Bookingpage places={places}></Bookingpage>
+          </Route>
+          <Route user={loggedInUser} path="/search/:placeId">
+            <Search></Search>
           </Route>
           <Route exact path="/">
             <Homepage places={places}></Homepage>

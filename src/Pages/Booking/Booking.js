@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./Booking.module.scss";
 import cx from "classname";
 // import LocationCard from "../../Components/Location_Card/LocationCard";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   TextField,
   // FormControl,
@@ -36,10 +36,21 @@ const useStyles = makeStyles((theme) => ({
       // margin: "0 auto",
 
       margin: theme.spacing(1),
-      width: "60ch",
+      // width: "60ch",
       display: "block",
     },
     "& .MuiButton-fullWidth": {
+      "&:hover": {
+        "& .MuiButton-label": {
+          textDecoration: "none",
+          // color: "red",
+        },
+        textDecoration: "none",
+        listStyle: "none",
+        // backgroundColor: "red",
+        linkStyle: "none",
+        outlined: "none",
+      },
       marginTop: "30px",
       width: "95% !important",
       paddingTop: "12px",
@@ -63,7 +74,7 @@ const Bookingpage = ({ places }) => {
   useEffect(() => {
     const place = places.find((place) => place.id === placeId);
     setSelectedPlace(place);
-  }, [places]);
+  }, []);
   console.log("place");
   console.log(selectedPlace);
 
@@ -147,12 +158,17 @@ const Bookingpage = ({ places }) => {
                           "aria-label": "change date",
                         }}
                       />
-                      />
                     </Grid>
                   </MuiPickersUtilsProvider>
-                  <Button variant="contained" fullWidth>
-                    Booking
-                  </Button>
+                  <Link to={`/search/${placeId}`}>
+                    <Button
+                      variant="contained"
+                      fullWidth
+                      style={{ textDecoration: "none" }}
+                    >
+                      Booking
+                    </Button>
+                  </Link>
                 </form>
               </div>
             </div>

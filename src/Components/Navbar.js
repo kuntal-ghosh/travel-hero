@@ -17,7 +17,11 @@ const Navbar = ({ user }) => {
   let inputColor;
   let inputPlaceholderColorClass;
   let navLinkColor;
-  if (location.pathname === "/signin" || location.pathname === "/signup") {
+  if (
+    location.pathname === "/signin" ||
+    location.pathname.includes("/search/") ||
+    location.pathname === "/signup"
+  ) {
     console.log("true");
     logoColor = { filter: "invert(0%)" };
     inputColor = { borderColor: "black", color: "black" };

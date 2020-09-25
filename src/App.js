@@ -50,7 +50,7 @@ function App() {
             <Route path="/booking/:placeId">
               <Bookingpage places={places}></Bookingpage>
             </Route>
-            <PrivateRoute path="/search/:placeId">
+            <PrivateRoute user={loggedInUser} path="/search/:placeId">
               <Search></Search>
             </PrivateRoute>
             <Route exact path="/">

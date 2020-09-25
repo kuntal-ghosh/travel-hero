@@ -249,16 +249,17 @@ const SignIn = () => {
           console.log(user);
           delete newUser.error.message;
           setloggedInUser(loggedUser);
+          setUser(newUser);
+          history.push(from.pathname);
         }
       } catch (e) {
         console.log(e.message);
         // const newUser = { ...user };
         newUser.error.message = e.message;
-        // setUser(newUser);
+        setUser(newUser);
       }
     }
-    setUser(newUser);
-    authenticate();
+    // authenticate();
 
     // console.log("submit response");
     // console.log(response);

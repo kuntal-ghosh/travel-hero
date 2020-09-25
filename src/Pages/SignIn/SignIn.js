@@ -294,18 +294,25 @@ const SignIn = () => {
     let newUser = { ...user };
 
     try {
-      const response = await firebase.signinWithFacebook();
-      console.log(response);
+      const user = await firebase.signinWithFacebook();
+      console.log("facebook response");
+      console.log(user);
+      if (user) {
+        newUser.email = user.email || "facebook@gmail.com";
+        newUser.displayName = user.displayName;
+        newUser.photoURL = user.photoURL;
+        delete newUser.error.message;
 
-      newUser.email = response.user.email;
-      delete newUser.error.message;
+        setloggedInUser(newUser);
 
-      // newUser.password = user.password;
-      setloggedInUser(user);
-
-      setUser(newUser);
+        setUser(newUser);
+        // authenticate();
+        history.push(from);
+      }
     } catch (e) {
       console.log(e.message);
+      newUser.error.message = e.message;
+      setUser(newUser);
     }
   }
 
@@ -329,6 +336,8 @@ const SignIn = () => {
       }
     } catch (e) {
       console.log(e.message);
+      newUser.error.message = e.message;
+      setUser(newUser);
     }
   }
 };

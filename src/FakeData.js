@@ -57,7 +57,7 @@ let FakeData = [
         rating: "4.9",
         cost: "23",
         reviews: "123",
-        imageUrl: "/images/Rectangle 28.png",
+        imageUrl: "/images/Rectangle 26.png",
         id: 3,
       },
     ],

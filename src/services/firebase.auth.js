@@ -65,11 +65,11 @@ function signinWithGoogle() {
 }
 
 function signout() {
- return firebase
+  return firebase
     .auth()
     .signOut()
     .then(function (response) {
-            // Sign-out successful.
+      // Sign-out successful.
     })
     .catch(function (error) {
       // An error happened.
@@ -87,7 +87,7 @@ function signinWithFacebook() {
       // The signed-in user info.
       var user = result.user;
       // ...
-      return result;
+      return user;
     })
     .catch(function (error) {
       // Handle Errors here.

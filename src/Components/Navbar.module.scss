@@ -26,10 +26,13 @@
   list-style: none;
   font-size: 1.6rem;
   cursor: pointer;
-  button {
-    padding: 0.4rem 2rem;
-    background-color: #f9a51a;
-    border-radius: 0.5rem;
+  &_button {
+    padding: 0.4rem 2rem !important;
+    background-color: #f9a51a !important;
+    border-radius: 0.5rem !important;
+  }
+  button{
+    background-color:"transparent" !important;
   }
   &_nav_link {
     a {
@@ -37,6 +40,8 @@
     }
   }
 }
+
+
 
 .navbar_container_ul_li_img {
   flex: 1;

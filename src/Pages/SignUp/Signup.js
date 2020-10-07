@@ -2,7 +2,8 @@ import React, { useContext, useState } from "react";
 import Checkbox from "@material-ui/core/Checkbox";
 import navbarColorContext from "../../Context/NavbarColorContext";
 import styles from "./Signup.module.scss";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
+import userContext from "../../Context/userContext";
 import {
   TextField,
   FormControl,
@@ -58,6 +59,11 @@ const useStyles = makeStyles((theme) => ({
 
 const Signup = () => {
   const classes = useStyles();
+  const location = useLocation();
+
+  const [loggedInUser, setloggedInUser] = useContext(userContext);
+  let { from } = location.state || { from: { pathname: "/" } };
+
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
@@ -251,34 +257,32 @@ const Signup = () => {
     if (newUser.confirmPassword === "") {
       newUser.error.confirmPassword = "Confirm Password is required";
     } else delete newUser.error.confirmPassword;
-    setUser(newUser);
 
-    let errors = Object.keys(user.error).length > 0;
+    let errors = Object.keys(newUser.error).length > 0;
 
     if (!errors) {
       try {
         let { user: registerUser } = await firebase.signupwithEmailPassword(
-          user.email,
-          user.password
+          newUser.email,
+          newUser.password
         );
         console.log("response");
         console.log(registerUser);
-        if(registerUser.email)
-      {
-       history.push("/signin"); 
-      }
-       
+        if (registerUser.email) {
+          setloggedInUser(user);
+          history.push("/signin");
+        }
       } catch (e) {
         console.log(e.message);
         const newUser = { ...user };
         newUser.error.message = e.message;
-        setUser(newUser);
+        // setUser(newUser);
       }
-      
     }
 
     // console.log("submit response");
     // console.log(response);
+    setUser(newUser);
   }
 
   function handleChange({ target: { name, value } }) {
@@ -334,13 +338,17 @@ const Signup = () => {
     let newUser = { ...user };
 
     try {
-      const { user } = await firebase.signupwithEmailPassword();
+      const { user } = await firebase.signinWithGoogle();
       console.log(user);
       newUser.email = user.email;
       newUser.password = user.password;
       setUser(newUser);
+      setloggedInUser(user);
+      history.push(from);
     } catch (e) {
       console.log(e.message);
+      newUser.error.message = e.message;
+      setUser(newUser);
     }
   }
 };

@@ -4,7 +4,7 @@ import cx from "classname";
 import logo from "../assets/Logo.png";
 import { Link, useLocation, useHistory } from "react-router-dom";
 import navbarColorContext from "../Context/NavbarColorContext";
-import { NavDropdown, Image } from "react-bootstrap";
+import { NavDropdown, Image, DropdownButton, Dropdown } from "react-bootstrap";
 import * as firebase from "../services/firebase.auth";
 import userContext from "../Context/userContext";
 
@@ -40,24 +40,31 @@ const Navbar = ({ user }) => {
 
   let button = loggedInUser.email ? (
     <div className=" d-flex">
-      <NavDropdown
+      <DropdownButton
         title={
-          <span style={{ color: "black!important" }}>
+          <span style={{fontSize:"12px"}}>
             {loggedInUser.email && loggedInUser.displayName}
           </span>
         }
-        id="basic-nav-dropdown"
-        className="d-inline-block navbar_button_nav_dropdown text-primary"
-        style={{ margin: "auto", color: "black" }}
+        // key={direction}
+        id={`dropdown-button-drop-${loggedInUser.email}`}
+        drop="down"
+        variant="secondary"
+        // className="d-inline-block navbar_button_nav_dropdown"
+        style={{
+          margin: "auto",
+          color: "white !important",
+          backgroundColor: "transparent !important",
+        }}
       >
-        <NavDropdown.Item
+        <Dropdown.Item
           onClick={googleSignOut}
           className={styles.button_nav_dropdown_item}
           // style={{ color: "black !important" }}
         >
           sign Out
-        </NavDropdown.Item>
-      </NavDropdown>
+        </Dropdown.Item>
+      </DropdownButton>
 
       <Image
         src={loggedInUser.email && loggedInUser.photoURL}
@@ -68,7 +75,12 @@ const Navbar = ({ user }) => {
     </div>
   ) : (
     <Link to="/signin">
-      <button onClick={onLoginClick}>Login</button>
+      <button
+        className={styles.navbar_container_ul_li_button}
+        onClick={onLoginClick}
+      >
+        Login
+      </button>
     </Link>
   );
 
